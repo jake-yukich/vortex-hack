@@ -727,7 +727,7 @@ class StripedHyena(nn.Module):
 
     def cross_device_transfer(self, x, block_idx):
         if self.block_idx_to_device[max(block_idx - 1, 0)] != self.block_idx_to_device[block_idx]:
-            # x = x.to(self.block_idx_to_device[block_idx]) # No-op if all on same device
+            x = x.to(self.block_idx_to_device[block_idx])
         return x
 
     def stateful_forward(self, x, inference_params_dict=None):
@@ -742,7 +742,7 @@ class StripedHyena(nn.Module):
                     activations_logger.info(
                         f"pre block {block_idx} activation_diff: {activation_diff.max()}, {activation_diff.mean()}"
                     )
-            # x = self.cross_device_transfer(x, block_idx) # No-op
+            x = self.cross_device_transfer(x, block_idx)
             x, _ = block(x, inference_params=inference_params)
 
             if self.print_activations:
@@ -770,7 +770,7 @@ class StripedHyena(nn.Module):
                         f"pre block {block_idx} activation_diff: {activation_diff.max()}, {activation_diff.mean()}"
                     )
 
-            # x = self.cross_device_transfer(x, block_idx) # No-op
+            x = self.cross_device_transfer(x, block_idx)
             x, _ = block(x, inference_params=None, padding_mask=padding_mask)
 
             if self.print_activations:
