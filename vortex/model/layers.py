@@ -65,7 +65,7 @@ class RMSNorm(torch.nn.Module):
         #     return self.rmsnorm_func(x, self.scale, self.eps)
         # else:
         y = x / (x.norm(2, dim=-1, keepdim=True) * self.hidden_size ** (-1.0 / 2) + self.eps)
-            return self.scale * y
+        return self.scale * y
 
 
 class ParallelGatedMLP(nn.Module):
